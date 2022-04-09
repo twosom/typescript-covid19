@@ -172,9 +172,7 @@ function renderChart(data, labels) {
     const ctx = $('#lineChart').getContext('2d');
     Chart.defaults.color = '#f5eaea';
     Chart.defaults.font.family = 'Exo 2';
-    if (createdChart) {
-        createdChart.destroy();
-    }
+    createdChart?.destroy();
     createdChart = new Chart(ctx, {
         type: 'line',
         "data": {
