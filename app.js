@@ -17,6 +17,7 @@ const deathsList = $('.deaths-list');
 const recoveredList = $('.recovered-list');
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
+let createdChart
 
 function createSpinnerElement(id) {
     const wrapperDiv = document.createElement('div');
@@ -168,18 +169,22 @@ async function setupData() {
 }
 
 function renderChart(data, labels) {
-    var ctx = $('#lineChart').getContext('2d');
+    const ctx = $('#lineChart').getContext('2d');
     Chart.defaults.color = '#f5eaea';
     Chart.defaults.font.family = 'Exo 2';
-    new Chart(ctx, {
+    if (createdChart) {
+        createdChart.destroy();
+    }
+    createdChart = new Chart(ctx, {
         type: 'line',
-        data: {
+        "data": {
             labels,
             datasets: [
                 {
                     label: 'Confirmed for the last two weeks',
                     backgroundColor: '#feb72b',
                     borderColor: '#feb72b',
+                    fill: true,
                     data,
                 },
             ],
