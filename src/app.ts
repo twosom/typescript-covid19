@@ -1,5 +1,17 @@
+interface CovidElementMapper {
+    ".confirmed-total": HTMLSpanElement;
+    ".deaths": HTMLParagraphElement;
+    ".recovered": HTMLParagraphElement;
+    ".last-updated-time": HTMLParagraphElement;
+    ".rank-list": HTMLOListElement;
+    ".deaths-list": HTMLOListElement;
+    ".recovered-list": HTMLOListElement;
+    "#lineChart": HTMLCanvasElement;
+}
+
+
 // utils
-function $(selector: string) {
+function $<K extends keyof CovidElementMapper>(selector: K): CovidElementMapper[K] {
     return document.querySelector(selector);
 }
 
@@ -15,6 +27,8 @@ const lastUpdatedTime = $('.last-updated-time');
 const rankList = $('.rank-list');
 const deathsList = $('.deaths-list');
 const recoveredList = $('.recovered-list');
+
+
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
 let createdChart: any
@@ -170,7 +184,8 @@ async function setupData() {
 }
 
 function renderChart(data: any, labels: any) {
-    const ctx = $('#lineChart').getContext('2d');
+    let $lineChart = $('#lineChart');
+    const ctx = $lineChart.getContext('2d');
     Chart.defaults.color = '#f5eaea';
     Chart.defaults.font.family = 'Exo 2';
     createdChart?.destroy();
