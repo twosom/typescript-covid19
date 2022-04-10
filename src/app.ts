@@ -1,11 +1,21 @@
-// @ts-check
+interface CovidElementMapper {
+    ".confirmed-total": HTMLSpanElement;
+    ".deaths": HTMLParagraphElement;
+    ".recovered": HTMLParagraphElement;
+    ".last-updated-time": HTMLParagraphElement;
+    ".rank-list": HTMLOListElement;
+    ".deaths-list": HTMLOListElement;
+    ".recovered-list": HTMLOListElement;
+    "#lineChart": HTMLCanvasElement;
+}
+
 
 // utils
-function $(selector: any) {
+function $<K extends keyof CovidElementMapper>(selector: K): CovidElementMapper[K] {
     return document.querySelector(selector);
 }
 
-function getUnixTimestamp(date: any) {
+function getUnixTimestamp(date: Date) {
     return new Date(date).getTime();
 }
 
@@ -17,11 +27,13 @@ const lastUpdatedTime = $('.last-updated-time');
 const rankList = $('.rank-list');
 const deathsList = $('.deaths-list');
 const recoveredList = $('.recovered-list');
+
+
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
 let createdChart: any
 
-function createSpinnerElement(id: any) {
+function createSpinnerElement(id: string) {
     const wrapperDiv = document.createElement('div');
     wrapperDiv.setAttribute('id', id);
     wrapperDiv.setAttribute(
@@ -47,8 +59,13 @@ function fetchCovidSummary() {
     return axios.get(url);
 }
 
+enum CovidStatus {
+    CONFIRMED = "confirmed",
+    RECOVERED = "recovered",
+    DEATHS = "deaths"
+}
 
-function fetchCountryInfo(countryCode: any, status: any) {
+function fetchCountryInfo(countryCode: string, status: CovidStatus) {
     // params: confirmed, recovered, deaths
     const url = `https://api.covid19api.com/country/${countryCode}/status/${status}`;
     return axios.get(url);
@@ -83,15 +100,9 @@ async function handleListClick(event: any) {
     clearRecoveredList();
     startLoadingAnimation();
     isDeathLoading = true;
-    const {data: deathResponse} = await fetchCountryInfo(selectedId, 'deaths');
-    const {data: recoveredResponse} = await fetchCountryInfo(
-        selectedId,
-        'recovered',
-    );
-    const {data: confirmedResponse} = await fetchCountryInfo(
-        selectedId,
-        'confirmed',
-    );
+    const {data: deathResponse} = await fetchCountryInfo(selectedId, CovidStatus.DEATHS);
+    const {data: recoveredResponse} = await fetchCountryInfo(selectedId, CovidStatus.RECOVERED,);
+    const {data: confirmedResponse} = await fetchCountryInfo(selectedId, CovidStatus.CONFIRMED,);
     endLoadingAnimation();
     setDeathsList(deathResponse);
     setTotalDeathsByCountry(deathResponse);
@@ -173,7 +184,8 @@ async function setupData() {
 }
 
 function renderChart(data: any, labels: any) {
-    const ctx = $('#lineChart').getContext('2d');
+    let $lineChart = $('#lineChart');
+    const ctx = $lineChart.getContext('2d');
     Chart.defaults.color = '#f5eaea';
     Chart.defaults.font.family = 'Exo 2';
     createdChart?.destroy();
