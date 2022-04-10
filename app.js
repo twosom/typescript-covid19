@@ -1,3 +1,5 @@
+// @ts-check
+
 // utils
 function $(selector) {
     return document.querySelector(selector);
@@ -38,11 +40,64 @@ function createSpinnerElement(id) {
 let isDeathLoading = false;
 let isRecoveredLoading = false;
 
+
+/**
+ * @typedef {Object} CountryObject
+ * @property {String} Country
+ * @property {String} CountryCode
+ * @property {String} Date
+ * @property {Number} NewConfirmed
+ * @property {Number} NewDeaths
+ * @property {Number} NewRecovered
+ * @property {Object} Premium
+ * @property {String} Slug
+ * @property {Number} TotalConfirmed
+ * @property {Number} TotalDeaths
+ * @property {Number} TotalRecovered
+ */
+
+/**
+ * @typedef {Object} Global
+ * @property {String} Date
+ * @property {Number} NewConfirmed
+ * @property {Number} NewDeaths
+ * @property {Number} NewRecovered
+ * @property {Number} TotalConfirmed
+ * @property {Number} TotalDeaths
+ * @property {Number} TotalRecovered
+ */
+
+/**
+ * @typedef {Object} CovidSummary
+ * @property {Array<CountryObject>} Countries
+ * @property {String} Date
+ * @property {Global} Global
+ * @property {String} ID
+ * @property {String} Message
+ */
+
+
 // api
+/**
+ * @returns {Promise<CovidSummary>}
+ */
 function fetchCovidSummary() {
     const url = 'https://api.covid19api.com/summary';
-    return axios.get(url);
+    return new Promise((resolve, reject) => {
+        axios.get(url)
+            .then(res => {
+                if (res.status === 200) {
+                    resolve(res.data);
+                } else {
+                    reject(reject);
+                }
+            })
+            .catch(err => {
+                reject(errr);
+            })
+    });
 }
+
 
 function fetchCountryInfo(countryCode, status) {
     // params: confirmed, recovered, deaths
@@ -160,12 +215,12 @@ function endLoadingAnimation() {
 }
 
 async function setupData() {
-    const {data} = await fetchCovidSummary();
-    setTotalConfirmedNumber(data);
-    setTotalDeathsByWorld(data);
-    setTotalRecoveredByWorld(data);
-    setCountryRanksByConfirmedCases(data);
-    setLastUpdatedTimestamp(data);
+    const covidSummary = await fetchCovidSummary();
+    setTotalConfirmedNumber(covidSummary);
+    setTotalDeathsByWorld(covidSummary);
+    setTotalRecoveredByWorld(covidSummary);
+    setCountryRanksByConfirmedCases(covidSummary);
+    setLastUpdatedTimestamp(covidSummary);
 }
 
 function renderChart(data, labels) {
