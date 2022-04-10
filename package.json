@@ -1,0 +1,24 @@
+{
+  "name": "typescript-covid19",
+  "version": "1.0.0",
+  "description": "최종 프로젝트 폴더입니다",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twosom/typescript-covid19.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/twosom/typescript-covid19/issues"
+  },
+  "homepage": "https://github.com/twosom/typescript-covid19#readme",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}

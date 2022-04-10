@@ -93,7 +93,7 @@ function fetchCovidSummary() {
                 }
             })
             .catch(err => {
-                reject(errr);
+                reject(err);
             })
     });
 }
