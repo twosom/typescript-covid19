@@ -10,9 +10,7 @@ interface CovidElementMapper {
 }
 
 // utils
-function $<K extends keyof CovidElementMapper>(
-    selector: K
-): CovidElementMapper[K] {
+function $<K extends keyof CovidElementMapper>(selector: K): CovidElementMapper[K] {
     return document.querySelector(selector);
 }
 
@@ -35,10 +33,7 @@ let createdChart: { destroy: () => void };
 function createSpinnerElement(id: string) {
     const wrapperDiv = document.createElement('div');
     wrapperDiv.setAttribute('id', id);
-    wrapperDiv.setAttribute(
-        'class',
-        'spinner-wrapper flex justify-center align-center'
-    );
+    wrapperDiv.setAttribute('class', 'spinner-wrapper flex justify-center align-center');
     const spinnerDiv = document.createElement('div');
     spinnerDiv.setAttribute('class', 'ripple-spinner');
     spinnerDiv.appendChild(document.createElement('div'));
@@ -82,10 +77,7 @@ function initEvents() {
 
 async function handleListClick(event: any) {
     let selectedId;
-    if (
-        event.target instanceof HTMLParagraphElement ||
-        event.target instanceof HTMLSpanElement
-    ) {
+    if (event.target instanceof HTMLParagraphElement || event.target instanceof HTMLSpanElement) {
         selectedId = event.target.parentElement.id;
     }
     if (event.target instanceof HTMLLIElement) {
@@ -98,18 +90,9 @@ async function handleListClick(event: any) {
     clearRecoveredList();
     startLoadingAnimation();
     isDeathLoading = true;
-    const { data: deathResponse } = await fetchCountryInfo(
-        selectedId,
-        CovidStatus.DEATHS
-    );
-    const { data: recoveredResponse } = await fetchCountryInfo(
-        selectedId,
-        CovidStatus.RECOVERED
-    );
-    const { data: confirmedResponse } = await fetchCountryInfo(
-        selectedId,
-        CovidStatus.CONFIRMED
-    );
+    const { data: deathResponse } = await fetchCountryInfo(selectedId, CovidStatus.DEATHS);
+    const { data: recoveredResponse } = await fetchCountryInfo(selectedId, CovidStatus.RECOVERED);
+    const { data: confirmedResponse } = await fetchCountryInfo(selectedId, CovidStatus.CONFIRMED);
     endLoadingAnimation();
     setDeathsList(deathResponse);
     setTotalDeathsByCountry(deathResponse);
@@ -218,9 +201,7 @@ function setChartData(data: any) {
     const chartData = data.slice(-14).map((value: any) => value.Cases);
     const chartLabel = data
         .slice(-14)
-        .map((value: any) =>
-            new Date(value.Date).toLocaleDateString().slice(5, -1)
-        );
+        .map((value: any) => new Date(value.Date).toLocaleDateString().slice(5, -1));
     renderChart(chartData, chartLabel);
 }
 
@@ -246,9 +227,7 @@ function setTotalRecoveredByWorld(data: any) {
 }
 
 function setCountryRanksByConfirmedCases(data: any) {
-    const sorted = data.Countries.sort(
-        (a: any, b: any) => b.TotalConfirmed - a.TotalConfirmed
-    );
+    const sorted = data.Countries.sort((a: any, b: any) => b.TotalConfirmed - a.TotalConfirmed);
     sorted.forEach((value: any) => {
         const li = document.createElement('li');
         li.setAttribute('class', 'list-item flex align-center');
