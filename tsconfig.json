@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "ES5",
+    "outDir": "./built",
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "lib": [
+      "ES2015",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "noImplicitAny": true,
+    "strict": true,
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "compileOnSave": true
+}
