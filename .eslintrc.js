@@ -15,7 +15,7 @@ module.exports = {
             'error',
             {
                 singleQuote: true,
-                semi: true,
+                semi: false,
                 useTabs: false,
                 tabWidth: 4,
                 printWidth: 120,
@@ -27,4 +27,4 @@ module.exports = {
     parserOptions: {
         parser: '@typescript-eslint/parser',
     },
-};
+}
